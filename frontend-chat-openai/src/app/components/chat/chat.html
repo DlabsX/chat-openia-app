@@ -1,0 +1,31 @@
+<div class="chat-container">
+  <h2>💬 Chat con OpenAI</h2>
+
+  <div class="messages">
+    <div *ngFor="let msg of (messages$ | async)" class="message" [ngClass]="msg.role">
+      <div class="bubble">
+        <strong *ngIf="msg.role === 'user'">Tú:</strong>
+        <strong *ngIf="msg.role === 'assistant'">Asistente:</strong>
+        <span>{{ msg.content }}</span>
+      </div>
+    </div>
+  </div>
+
+  <form (ngSubmit)="sendMessage()" class="input-area">
+    <input
+      type="text"
+      [(ngModel)]="prompt"
+      name="prompt"
+      placeholder="Escribe tu mensaje..."
+      [disabled]="(loading$ | async)!"
+      required
+    />
+    <button type="submit" [disabled]="(loading$ | async)!">
+      {{ (loading$ | async)! ? 'Enviando...' : 'Enviar' }}
+    </button>
+  </form>
+
+  <div class="error" *ngIf="(error$ | async) as error">
+    ⚠️ {{ error }}
+  </div>
+</div>
